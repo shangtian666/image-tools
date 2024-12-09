@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片工具</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- JSZip库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- 头部标题 -->
+        <header>
+            <div class="header-content">
+                <h1>图片工具</h1>
+                <p>简单高效的在线图片处理服务</p>
+            </div>
+        </header>
+
+        <!-- 功能选择 -->
+        <div class="function-tabs">
+            <button class="tab-btn active" data-tab="compress">图片压缩</button>
+            <button class="tab-btn" data-tab="idphoto">证件照</button>
+        </div>
+
+        <!-- 主要内容区域 -->
+        <main>
+            <!-- 图片压缩功能 -->
+            <div class="function-section active" id="compressSection">
+                <!-- 上传区域 -->
+                <div class="upload-section" id="dropZone">
+                    <input type="file" id="fileInput" accept="image/png,image/jpeg" multiple hidden>
+                    <div class="upload-content">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50' viewBox='0 0 24 24'%3E%3Cpath fill='%23666' d='M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z'/%3E%3C/svg%3E" alt="上传图标">
+                        <p>拖放图片到这里或点击上传</p>
+                        <span class="support-text">支持多张PNG、JPG格式图片</span>
+                    </div>
+                </div>
+
+                <!-- 压缩设置 -->
+                <div class="compress-settings">
+                    <div class="quality-control">
+                        <label for="quality">压缩质量：<span id="qualityValue">80%</span></label>
+                        <input type="range" id="quality" min="0" max="100" value="80" step="1">
+                    </div>
+                </div>
+
+                <!-- 预览和确认区域 -->
+                <div class="preview-confirm-section" id="previewConfirmSection" style="display: none;">
+                    <div class="preview-header">
+                        <h3>预览效果（共 <span id="imageCount">0</span> 张图片）</h3>
+                        <div class="preview-actions">
+                            <button id="previewCompressBtn" class="action-btn primary-btn">
+                                <span class="btn-icon">🔄</span>
+                                压缩预览
+                            </button>
+                            <button id="confirmDownloadBtn" class="action-btn secondary-btn" disabled>
+                                <span class="btn-icon">⬇️</span>
+                                确认并下载
+                            </button>
+                            <button id="clearAllBtn" class="action-btn danger-btn">
+                                <span class="btn-icon">🗑️</span>
+                                清空列表
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 进度条 -->
+                    <div class="batch-progress" style="display: none;">
+                        <div class="progress-bar">
+                            <div class="progress-fill"></div>
+                        </div>
+                        <span class="progress-text">0/0 已完成</span>
+                    </div>
+
+                    <!-- 图片列表 -->
+                    <div class="image-grid" id="imageList">
+                        <!-- 图片项会动态添加到这里 -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 压缩完成提示 -->
+            <div id="toast" class="toast" style="display: none;">
+                <span class="toast-icon">✅</span>
+                <span class="toast-message"></span>
+            </div>
+
+            <!-- 证件照功能 -->
+            <div class="function-section" id="idphotoSection">
+                <!-- 上传区域 -->
+                <div class="upload-section" id="idPhotoDropZone">
+                    <input type="file" id="idPhotoInput" accept="image/png,image/jpeg" multiple hidden>
+                    <div class="upload-content">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50' viewBox='0 0 24 24'%3E%3Cpath fill='%23666' d='M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z'/%3E%3C/svg%3E" alt="上传图标">
+                        <p>拖放图片到这里或点击上传</p>
+                        <span class="support-text">支持多张PNG、JPG格式图片</span>
+                    </div>
+                </div>
+
+                <!-- 证件照设置 -->
+                <div class="idphoto-settings">
+                    <!-- 尺寸选择 -->
+                    <div class="setting-group">
+                        <label>照片尺寸：</label>
+                        <select id="photoSize" class="select-style">
+                            <option value="small_one">小一寸（22×32mm）</option>
+                            <option value="one">一寸（25×35mm）</option>
+                            <option value="large_one">大一寸（33×48mm）</option>
+                            <option value="small_two">小二寸（35×45mm）</option>
+                            <option value="two">二寸（35×49mm）</option>
+                            <option value="large_two">大二寸（35×53mm）</option>
+                        </select>
+                    </div>
+
+                    <!-- 背景颜色选择 -->
+                    <div class="setting-group">
+                        <label>背景颜色：</label>
+                        <div class="color-options">
+                            <div class="color-category">
+                                <span class="category-label">基础色</span>
+                                <div class="color-row">
+                                    <button class="color-btn active" data-color="#FFFFFF" style="background-color: #FFFFFF;">白色</button>
+                                    <button class="color-btn" data-color="#0000FF" style="background-color: #0000FF;">蓝色</button>
+                                    <button class="color-btn" data-color="#FF0000" style="background-color: #FF0000;">红色</button>
+                                </div>
+                            </div>
+                            <div class="color-category">
+                                <span class="category-label">自定义颜色</span>
+                                <div class="color-row">
+                                    <input type="color" id="customColor" value="#FFFFFF">
+                                    <label for="customColor" class="custom-color-label">选择自定义颜色</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 预览和确认区域 -->
+                <div class="preview-confirm-section" id="idPhotoPreviewSection" style="display: none;">
+                    <div class="preview-header">
+                        <h3>预览效果（共 <span id="idPhotoCount">0</span> 张图片）</h3>
+                        <div class="preview-actions">
+                            <button id="processIdPhotosBtn" class="action-btn primary-btn">
+                                <span class="btn-icon">🔄</span>
+                                生成证件照
+                            </button>
+                            <button id="downloadIdPhotosBtn" class="action-btn secondary-btn" disabled>
+                                <span class="btn-icon">⬇️</span>
+                                确认并下载
+                            </button>
+                            <button id="clearIdPhotosBtn" class="action-btn danger-btn">
+                                <span class="btn-icon">🗑️</span>
+                                清空列表
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 进度条 -->
+                    <div class="batch-progress" style="display: none;">
+                        <div class="progress-bar">
+                            <div class="progress-fill"></div>
+                        </div>
+                        <span class="progress-text">0/0 已完成</span>
+                    </div>
+
+                    <!-- 图片列表 -->
+                    <div class="image-grid" id="idPhotoList">
+                        <!-- 图片项会动态添加到这里 -->
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- 页脚 -->
+        <footer>
+            <p>© 2024 图片工具 - 简单、高效、安全</p>
+        </footer>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+    <script src="js/main.js"></script>
+    <script src="js/compress.js"></script>
+    <script src="js/photo.js"></script>
+</body>
+</html> 

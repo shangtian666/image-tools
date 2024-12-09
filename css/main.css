@@ -1,0 +1,168 @@
+/* 头部样式 */
+header {
+    background-color: #f8f9fa;
+    padding: 20px;
+    text-align: center;
+    border-bottom: 1px solid #dee2e6;
+}
+
+header h1 {
+    margin: 0;
+    color: #343a40;
+    font-size: 2em;
+}
+
+header p {
+    margin: 10px 0 0;
+    color: #6c757d;
+}
+
+/* 主要内容区域 */
+
+/* 上传区域样式 */
+.upload-section {
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    padding: 40px 20px;
+    text-align: center;
+    background: #f8f9fa;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.upload-section:hover {
+    border-color: #0d6efd;
+    background: #f1f8ff;
+}
+
+.upload-section.drag-over {
+    border-color: #0d6efd;
+    background: #e8f3ff;
+}
+
+.upload-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.upload-content img {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 10px;
+}
+
+.upload-content p {
+    margin: 0;
+    font-size: 1.1em;
+    color: #333;
+}
+
+.support-text {
+    font-size: 0.9em;
+    color: #666;
+}
+
+/* 证件照预览区域样式 */
+.preview-pair {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    justify-content: center;
+    position: relative;
+}
+
+.preview-original,
+.preview-processed {
+    flex: 1;
+    max-width: 200px;
+    position: relative;
+    background: #f8f9fa;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.preview-original img,
+.preview-processed img {
+    width: 100%;
+    height: 200px;
+    object-fit: contain;
+    display: block;
+}
+
+.process-status {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+}
+
+.size-label {
+    padding: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    font-size: 12px;
+    color: #666;
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+}
+
+.image-info {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.image-name {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 5px;
+    word-break: break-all;
+}
+
+/* 图片列表样式 */
+#idPhotoList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+    justify-content: center;
+}
+
+.image-item {
+    background: #fff;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 450px;
+}
+
+/* 状态样式 */
+.status-pending {
+    background: #f8f9fa;
+}
+
+.status-processing {
+    background: #fff3cd;
+}
+
+.status-done {
+    background: #d4edda;
+}
+
+.status-error {
+    background: #f8d7da;
+} 
